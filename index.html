@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Crēdo Legal · Meta Ads Phase 1 Preview</title>
+<style>
+  :root {
+    --fb-bg: #f0f2f5;
+    --fb-card: #ffffff;
+    --fb-text: #050505;
+    --fb-secondary: #65676b;
+    --fb-divider: #ced0d4;
+    --fb-cta: #ffffff;
+    --fb-cta-bg: #1877f2;
+    --fb-cta-hover: #166fe5;
+    --credo-red: #DC4646;
+    --credo-lavender: #C5CAE9;
+    --credo-cream: #F5F0E5;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--fb-bg);
+    color: var(--fb-text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.4;
+  }
+  header.page {
+    background: linear-gradient(180deg, var(--credo-lavender) 0%, #e8eaf6 100%);
+    padding: 32px 24px;
+    border-bottom: 1px solid var(--fb-divider);
+  }
+  header.page h1 {
+    margin: 0 0 6px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--credo-red);
+    letter-spacing: -0.01em;
+  }
+  header.page p {
+    margin: 0;
+    color: var(--fb-secondary);
+    font-size: 14px;
+    max-width: 720px;
+  }
+  header.page .framework {
+    margin-top: 14px;
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.6);
+    border-radius: 6px;
+    font-size: 13px;
+    color: var(--fb-text);
+    max-width: 720px;
+  }
+  header.page .framework strong { color: var(--credo-red); font-family: Georgia, serif; }
+  header.page .meta {
+    margin-top: 14px;
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    color: var(--fb-secondary);
+    font-size: 13px;
+  }
+  header.page .meta span strong { color: var(--fb-text); }
+  main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+  }
+  section.vertical {
+    display: grid;
+    grid-template-columns: 460px 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+  @media (max-width: 980px) {
+    section.vertical { grid-template-columns: 1fr; }
+  }
+  section.vertical > .meta-col h2 {
+    margin: 0 0 4px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 22px;
+    color: var(--credo-red);
+  }
+  section.vertical > .meta-col .vertical-id {
+    color: var(--fb-secondary);
+    font-size: 13px;
+    font-family: ui-monospace, "SF Mono", Menlo, Monaco, Consolas, monospace;
+    margin-bottom: 14px;
+  }
+  section.vertical > .meta-col .burned {
+    background: var(--credo-cream);
+    border-left: 3px solid var(--credo-red);
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    font-family: Georgia, "Times New Roman", serif;
+    color: var(--credo-red);
+    font-size: 15px;
+  }
+  section.vertical > .meta-col .burned small {
+    display: block;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--fb-secondary);
+    margin-bottom: 4px;
+  }
+  section.vertical > .meta-col .copy-block { margin-bottom: 16px; }
+  section.vertical > .meta-col .copy-block .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--fb-secondary);
+    margin-bottom: 4px;
+  }
+  section.vertical > .meta-col .copy-block .value {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  section.vertical > .meta-col .copy-block .value .beat {
+    color: var(--credo-red);
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  section.vertical > .meta-col .copy-block.variants .value {
+    font-size: 13px;
+    color: var(--fb-secondary);
+    margin-top: 6px;
+    padding-left: 12px;
+    border-left: 2px solid var(--fb-divider);
+  }
+  section.vertical > .meta-col .cta-row {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  section.vertical > .meta-col .cta-row .cta-spec {
+    background: #f8f9fa;
+    border: 1px solid var(--fb-divider);
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 13px;
+    flex: 1;
+    min-width: 200px;
+  }
+  section.vertical > .meta-col .cta-row .cta-spec .label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--fb-secondary);
+    margin-bottom: 2px;
+  }
+  section.vertical > .meta-col .cta-row .cta-spec code {
+    background: #eef0f3;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 12px;
+  }
+  section.vertical > .ad-col {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  /* Ad mockup */
+  .fb-card {
+    background: var(--fb-card);
+    border: 1px solid var(--fb-divider);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    max-width: 500px;
+  }
+  .fb-card .post-header {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px 8px;
+    gap: 10px;
+  }
+  .fb-card .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--credo-lavender);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  .fb-card .avatar svg { display: block; }
+  .fb-card .post-header .name {
+    flex: 1;
+    line-height: 1.2;
+  }
+  .fb-card .post-header .name strong {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--fb-text);
+    display: block;
+  }
+  .fb-card .post-header .name small {
+    font-size: 12px;
+    color: var(--fb-secondary);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .fb-card .post-header .menu {
+    color: var(--fb-secondary);
+    font-size: 18px;
+    padding: 6px;
+    cursor: pointer;
+  }
+  .fb-card .post-text {
+    padding: 0 16px 0;
+    font-size: 15px;
+    color: var(--fb-text);
+    line-height: 1.4;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .fb-card .post-text.expanded {
+    -webkit-line-clamp: unset;
+    display: block;
+    overflow: visible;
+  }
+  .fb-card .see-more {
+    display: none;
+    padding: 2px 16px 12px;
+    font-size: 15px;
+    color: var(--fb-secondary);
+    cursor: pointer;
+    background: none;
+    border: 0;
+    font-family: inherit;
+    text-align: left;
+  }
+  .fb-card .see-more.visible { display: block; }
+  .fb-card .see-more:hover { text-decoration: underline; }
+  .fb-card .post-text:not(.expanded) + .see-more.visible::before { content: "... "; }
+  .fb-card .post-text.expanded + .see-more.visible::before { content: ""; }
+  .fb-card .post-text.expanded + .see-more.visible { color: var(--fb-secondary); }
+  .fb-card .post-text + .text-spacer { height: 12px; }
+  .fb-card .ad-display {
+    display: block;
+    background: #000;
+    line-height: 0;
+  }
+  .fb-card .ad-display img,
+  .fb-card .ad-display video {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .fb-card .link-card {
+    display: flex;
+    align-items: stretch;
+    background: #f0f2f5;
+    padding: 12px 16px;
+    gap: 12px;
+    align-items: center;
+  }
+  .fb-card .link-card .link-text {
+    flex: 1;
+    min-width: 0;
+  }
+  .fb-card .link-card .link-text .domain {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: var(--fb-secondary);
+    letter-spacing: 0.02em;
+    margin-bottom: 2px;
+  }
+  .fb-card .link-card .link-text .headline {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--fb-text);
+    line-height: 1.25;
+    margin-bottom: 2px;
+  }
+  .fb-card .link-card .link-text .description {
+    font-size: 13px;
+    color: var(--fb-secondary);
+    line-height: 1.3;
+  }
+  .fb-card .link-card .cta {
+    background: var(--fb-cta-bg);
+    color: var(--fb-cta);
+    border: 0;
+    border-radius: 6px;
+    padding: 10px 16px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  .fb-card .link-card .cta:hover { background: var(--fb-cta-hover); }
+  .fb-card .actions {
+    display: flex;
+    border-top: 1px solid var(--fb-divider);
+    padding: 4px 8px;
+  }
+  .fb-card .actions button {
+    flex: 1;
+    background: none;
+    border: 0;
+    padding: 8px;
+    color: var(--fb-secondary);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 6px;
+  }
+  .fb-card .actions button:hover { background: #f2f2f2; }
+
+  /* Interactive carousel */
+  .carousel {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    max-width: 500px;
+  }
+  .carousel .thumb {
+    background: var(--fb-card);
+    border: 1px solid var(--fb-divider);
+    border-radius: 6px;
+    overflow: hidden;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.15s, transform 0.15s;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+  }
+  .carousel .thumb:hover {
+    border-color: var(--credo-red);
+    transform: translateY(-2px);
+  }
+  .carousel .thumb.active {
+    border-color: var(--credo-red);
+    border-width: 2px;
+    box-shadow: 0 0 0 1px var(--credo-red);
+  }
+  .carousel .thumb img,
+  .carousel .thumb video {
+    display: block;
+    width: 100%;
+    height: 80px;
+    object-fit: cover;
+    background: var(--credo-lavender);
+  }
+  .carousel .thumb .label {
+    padding: 4px 4px 5px;
+    font-size: 10px;
+    color: var(--fb-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-top: 1px solid var(--fb-divider);
+    line-height: 1.2;
+  }
+  .carousel .thumb.active .label {
+    color: var(--credo-red);
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<header class="page">
+  <h1>Crēdo Legal · Meta Ads Phase 1 Preview</h1>
+  <p>Six verticals × five deliverables (24 statics + 6 videos). Watercolor "After the Letter" direction. Copy structured to Context → Pain → Solution → Outcome.</p>
+  <div class="framework">
+    <strong>Copy framework.</strong> Every primary text walks the reader through four beats: <em>where you are now</em> (Context), <em>what hurts</em> (Pain), <em>what we do</em> (Solution: our attorneys plus a concrete mechanism), <em>what could change</em> (Outcome: a possible after-state, framed with "could" to avoid overpromising).
+  </div>
+  <div class="framework">
+    <strong>Interactive prototype.</strong> Click any thumbnail below an ad to swap that format into the live mockup. The 9:16 video plays inline with native controls. Long primary text is auto-truncated at 3 lines with a "See more" link, matching real Facebook behavior.
+  </div>
+  <div class="meta">
+    <span><strong>30</strong> deliverables</span>
+    <span><strong>6</strong> verticals</span>
+    <span><strong>3</strong> primary-text variants per vertical (DCO)</span>
+    <span>CTA <strong>Book Now</strong> · alt <strong>Call Now</strong></span>
+    <span>v5 copy <strong>2026-05-13</strong></span>
+  </div>
+</header>
+
+<main>
+
+<!-- ======================== ALLSTATES ======================== -->
+<section class="vertical" data-vertical="all-states" data-prefix="AS_AllStates_Form">
+  <div class="meta-col">
+    <h2>1. All-States</h2>
+    <div class="vertical-id">AS_AllStates_Form · broad / control</div>
+    <div class="burned">
+      <small>Burned into image (red Georgia)</small>
+      Then it ends.<br>Our attorneys handle it.
+    </div>
+    <div class="copy-block">
+      <div class="label">Primary text (variant 1)</div>
+      <div class="value">
+        <span class="beat">Context + Pain</span> You're behind on debt, and the calls won't stop. <span class="beat">Solution</span> Our attorneys can handle the legal part for a flat monthly fee. <span class="beat">Outcome</span> You could have your life back. Get a Free Review.
+      </div>
+    </div>
+    <div class="copy-block variants">
+      <div class="label">DCO variants 2 &amp; 3</div>
+      <div class="value">2. You're behind, and collectors are at every door. Our attorneys can take the legal weight off your shoulders: file responses, challenge what they can't prove, end the harassment. You could get your life back, for a flat monthly fee. Get a Free Consultation.</div>
+      <div class="value">3. Debt is squeezing every part of your week. Our attorneys can handle the legal part for a flat monthly fee, so you could put it down and breathe again. Get a Free Review.</div>
+    </div>
+    <div class="copy-block">
+      <div class="label">Headline (below image) · 30 chars</div>
+      <div class="value">Get a Free Review of Your Case</div>
+    </div>
+    <div class="copy-block">
+      <div class="label">Description · 34 chars</div>
+      <div class="value">Flat monthly fee. No upfront cost.</div>
+    </div>
+    <div class="cta-row">
+      <div class="cta-spec"><div class="label">Primary CTA (Lead Form)</div><code>BOOK_NOW</code> → "Book Now"</div>
+      <div class="cta-spec"><div class="label">Alternate (Click-to-Call)</div><code>CALL_NOW</code> · 347-474-9602</div>
+    </div>
+  </div>
+
+  <div class="ad-col">
+    <div class="fb-card">
+      <div class="post-header">
+        <div class="avatar"><svg width="22" height="22" viewBox="0 0 22 22"><g fill="#DC4646"><rect x="2" y="3" width="18" height="2"/><rect x="9" y="5" width="4" height="2"/><path d="M5 7 L17 7 L17 14 Q17 16 19 18 L3 18 Q5 16 5 14 Z"/><line x1="11" y1="9" x2="11" y2="16" stroke="#DC4646" stroke-width="1"/><circle cx="11" cy="16" r="1.5"/></g></svg></div>
+        <div class="name"><strong>Crēdo Legal</strong><small>Sponsored</small></div>
+        <div class="menu">⋯</div>
+      </div>
+      <p class="post-text">You're behind on debt, and the calls won't stop. Our attorneys can handle the legal part for a flat monthly fee. You could have your life back. Get a Free Review.</p>
+      <button class="see-more">See more</button>
+      <div class="ad-display">
+        <img src="assets/all-states/AS_AllStates_Form_4x5.png" alt="Crēdo Legal AllStates ad creative">
+      </div>
+      <div class="link-card">
+        <div class="link-text">
+          <div class="domain">credolegal.com</div>
+          <div class="headline">Get a Free Review of Your Case</div>
+          <div class="description">Flat monthly fee. No upfront cost.</div>
+        </div>
+        <button class="cta">Book Now</button>
+      </div>
+      <div class="actions"><button>👍 Like</button><button>💬 Comment</button><button>↗ Share</button></div>
+    </div>
+    <div class="carousel">
+      <button class="thumb" data-type="image" data-src="assets/all-states/AS_AllStates_Form_1x1.png"><img src="assets/all-states/AS_AllStates_Form_1x1.png"><span class="label">1:1 Feed</span></button>
+      <button class="thumb active" data-type="image" data-src="assets/all-states/AS_AllStates_Form_4x5.png"><img src="assets/all-states/AS_AllStates_Form_4x5.png"><span class="label">4:5 Feed mob</span></button>
+      <button class="thumb" data-type="image" data-src="assets/all-states/AS_AllStates_Form_9x16.png"><img src="assets/all-states/AS_AllStates_Form_9x16.png"><span class="label">9:16 Reels</span></button>
+      <button class="thumb" data-type="image" data-src="assets/all-states/AS_AllStates_Form_1_91x1.png"><img src="assets/all-states/AS_AllStates_Form_1_91x1.png"><span class="label">1.91:1 RC</span></button>
+      <button class="thumb" data-type="video" data-src="assets/all-states/AS_AllStates_Form_9x16.mp4"><video src="assets/all-states/AS_AllStates_Form_9x16.mp4" muted preload="metadata"></video><span class="label">9:16 video</span></button>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== CREDIT CARD ======================== -->
+<section class="vertical" data-vertical="credit-card" data-prefix="AS_CreditCard_NW_Form">
+  <div class="meta-col">
+    <h2>2. Credit Card</h2>
+    <div class="vertical-id">AS_CreditCard_NW_Form</div>
+    <div class="burned"><small>Burned into image</small>The negotiation closes.<br>We do the back-and-forth.</div>
+    <div class="copy-block">
+      <div class="label">Primary text (variant 1)</div>
+      <div class="value">
+        <span class="beat">Context + Pain</span> Credit-card debt is piling up, and minimum payments aren't catching up. <span class="beat">Solution</span> Our attorneys can negotiate the balance down and challenge what collectors can't prove. <span class="beat">Outcome</span> You could pay less than what they say you owe. Get a Free Review.
+      </div>
+    </div>
+    <div class="copy-block variants">
+      <div class="label">DCO variants 2 &amp; 3</div>
+      <div class="value">2. Credit cards keep growing, and the interest eats your minimum payment alive. Our attorneys can negotiate the balance down and dispute what creditors can't validate. You could settle for less than what they say you owe. Get a Free Consultation.</div>
+      <div class="value">3. Card debt has outgrown your budget, and the collectors won't stop. Our attorneys can do the back-and-forth so you don't have to. Your balance could come down, your debt could be settled. Get a Free Review.</div>
+    </div>
+    <div class="copy-block"><div class="label">Headline · 30 chars</div><div class="value">Get a Free Review of Your Case</div></div>
+    <div class="copy-block"><div class="label">Description · 30 chars</div><div class="value">Our attorneys negotiate. Free.</div></div>
+    <div class="cta-row">
+      <div class="cta-spec"><div class="label">Primary CTA</div><code>BOOK_NOW</code></div>
+      <div class="cta-spec"><div class="label">Alternate</div><code>CALL_NOW</code> · 646-952-7404</div>
+    </div>
+  </div>
+  <div class="ad-col">
+    <div class="fb-card">
+      <div class="post-header">
+        <div class="avatar"><svg width="22" height="22" viewBox="0 0 22 22"><g fill="#DC4646"><rect x="2" y="3" width="18" height="2"/><rect x="9" y="5" width="4" height="2"/><path d="M5 7 L17 7 L17 14 Q17 16 19 18 L3 18 Q5 16 5 14 Z"/><line x1="11" y1="9" x2="11" y2="16" stroke="#DC4646" stroke-width="1"/><circle cx="11" cy="16" r="1.5"/></g></svg></div>
+        <div class="name"><strong>Crēdo Legal</strong><small>Sponsored</small></div>
+        <div class="menu">⋯</div>
+      </div>
+      <p class="post-text">Credit-card debt is piling up, and minimum payments aren't catching up. Our attorneys can negotiate the balance down and challenge what collectors can't prove. You could pay less than what they say you owe. Get a Free Review.</p>
+      <button class="see-more">See more</button>
+      <div class="ad-display"><img src="assets/credit-card/AS_CreditCard_NW_Form_4x5.png"></div>
+      <div class="link-card">
+        <div class="link-text">
+          <div class="domain">credolegal.com</div>
+          <div class="headline">Get a Free Review of Your Case</div>
+          <div class="description">Our attorneys negotiate. Free.</div>
+        </div>
+        <button class="cta">Book Now</button>
+      </div>
+      <div class="actions"><button>👍 Like</button><button>💬 Comment</button><button>↗ Share</button></div>
+    </div>
+    <div class="carousel">
+      <button class="thumb" data-type="image" data-src="assets/credit-card/AS_CreditCard_NW_Form_1x1.png"><img src="assets/credit-card/AS_CreditCard_NW_Form_1x1.png"><span class="label">1:1 Feed</span></button>
+      <button class="thumb active" data-type="image" data-src="assets/credit-card/AS_CreditCard_NW_Form_4x5.png"><img src="assets/credit-card/AS_CreditCard_NW_Form_4x5.png"><span class="label">4:5 Feed mob</span></button>
+      <button class="thumb" data-type="image" data-src="assets/credit-card/AS_CreditCard_NW_Form_9x16.png"><img src="assets/credit-card/AS_CreditCard_NW_Form_9x16.png"><span class="label">9:16 Reels</span></button>
+      <button class="thumb" data-type="image" data-src="assets/credit-card/AS_CreditCard_NW_Form_1_91x1.png"><img src="assets/credit-card/AS_CreditCard_NW_Form_1_91x1.png"><span class="label">1.91:1 RC</span></button>
+      <button class="thumb" data-type="video" data-src="assets/credit-card/AS_CreditCard_NW_Form_9x16.mp4"><video src="assets/credit-card/AS_CreditCard_NW_Form_9x16.mp4" muted preload="metadata"></video><span class="label">9:16 video</span></button>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== LAWSUIT ======================== -->
+<section class="vertical" data-vertical="lawsuit" data-prefix="AS_Lawsuit_NW_Form">
+  <div class="meta-col">
+    <h2>3. Lawsuit / Served Papers</h2>
+    <div class="vertical-id">AS_Lawsuit_NW_Form</div>
+    <div class="burned"><small>Burned into image</small>The response filed.<br>We're on time.</div>
+    <div class="copy-block">
+      <div class="label">Primary text (variant 1)</div>
+      <div class="value">
+        <span class="beat">Context + Pain</span> You got served papers, and you have 20 to 28 days to respond before the court enters a default judgment. <span class="beat">Solution</span> Our attorneys can file your court answer and challenge whether the collector can actually prove the debt. <span class="beat">Outcome</span> Your case could be dismissed, or end on far better terms. Get a Free Review.
+      </div>
+    </div>
+    <div class="copy-block variants">
+      <div class="label">DCO variants 2 &amp; 3</div>
+      <div class="value">2. A debt collector is suing you. Most people don't respond and lose by default. Our attorneys can file your answer fast and put the burden of proof back on the collector. Your case could be dismissed. Get a Free Consultation.</div>
+      <div class="value">3. You've been served with a debt-collection summons, and the clock is on. Our attorneys can file the response, challenge their proof in court, and fight for dismissal. Your case could end here. Get a Free Review.</div>
+    </div>
+    <div class="copy-block"><div class="label">Headline · 30 chars</div><div class="value">Get a Free Review of Your Case</div></div>
+    <div class="copy-block"><div class="label">Description · 30 chars</div><div class="value">Our attorneys file fast. Free.</div></div>
+    <div class="cta-row">
+      <div class="cta-spec"><div class="label">Primary CTA</div><code>BOOK_NOW</code></div>
+      <div class="cta-spec"><div class="label">Alternate (recommended, urgency)</div><code>CALL_NOW</code> · 212-561-5902</div>
+    </div>
+  </div>
+  <div class="ad-col">
+    <div class="fb-card">
+      <div class="post-header">
+        <div class="avatar"><svg width="22" height="22" viewBox="0 0 22 22"><g fill="#DC4646"><rect x="2" y="3" width="18" height="2"/><rect x="9" y="5" width="4" height="2"/><path d="M5 7 L17 7 L17 14 Q17 16 19 18 L3 18 Q5 16 5 14 Z"/><line x1="11" y1="9" x2="11" y2="16" stroke="#DC4646" stroke-width="1"/><circle cx="11" cy="16" r="1.5"/></g></svg></div>
+        <div class="name"><strong>Crēdo Legal</strong><small>Sponsored</small></div>
+        <div class="menu">⋯</div>
+      </div>
+      <p class="post-text">You got served papers, and you have 20 to 28 days to respond before the court enters a default judgment. Our attorneys can file your court answer and challenge whether the collector can actually prove the debt. Your case could be dismissed, or end on far better terms. Get a Free Review.</p>
+      <button class="see-more">See more</button>
+      <div class="ad-display"><img src="assets/lawsuit/AS_Lawsuit_NW_Form_4x5.png"></div>
+      <div class="link-card">
+        <div class="link-text">
+          <div class="domain">credolegal.com</div>
+          <div class="headline">Get a Free Review of Your Case</div>
+          <div class="description">Our attorneys file fast. Free.</div>
+        </div>
+        <button class="cta">Book Now</button>
+      </div>
+      <div class="actions"><button>👍 Like</button><button>💬 Comment</button><button>↗ Share</button></div>
+    </div>
+    <div class="carousel">
+      <button class="thumb" data-type="image" data-src="assets/lawsuit/AS_Lawsuit_NW_Form_1x1.png"><img src="assets/lawsuit/AS_Lawsuit_NW_Form_1x1.png"><span class="label">1:1 Feed</span></button>
+      <button class="thumb active" data-type="image" data-src="assets/lawsuit/AS_Lawsuit_NW_Form_4x5.png"><img src="assets/lawsuit/AS_Lawsuit_NW_Form_4x5.png"><span class="label">4:5 Feed mob</span></button>
+      <button class="thumb" data-type="image" data-src="assets/lawsuit/AS_Lawsuit_NW_Form_9x16.png"><img src="assets/lawsuit/AS_Lawsuit_NW_Form_9x16.png"><span class="label">9:16 Reels</span></button>
+      <button class="thumb" data-type="image" data-src="assets/lawsuit/AS_Lawsuit_NW_Form_1_91x1.png"><img src="assets/lawsuit/AS_Lawsuit_NW_Form_1_91x1.png"><span class="label">1.91:1 RC</span></button>
+      <button class="thumb" data-type="video" data-src="assets/lawsuit/AS_Lawsuit_NW_Form_9x16.mp4"><video src="assets/lawsuit/AS_Lawsuit_NW_Form_9x16.mp4" muted preload="metadata"></video><span class="label">9:16 video</span></button>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== HARASSMENT ======================== -->
+<section class="vertical" data-vertical="harassment" data-prefix="AS_Harassment_NW_Form">
+  <div class="meta-col">
+    <h2>4. Harassment / FDCPA</h2>
+    <div class="vertical-id">AS_Harassment_NW_Form</div>
+    <div class="burned"><small>Burned into image</small>The calls can stop.<br>We send the cease letter.</div>
+    <div class="copy-block">
+      <div class="label">Primary text (variant 1)</div>
+      <div class="value">
+        <span class="beat">Context + Pain</span> A debt collector keeps calling. Before 8 AM, at your job, with threats. <span class="beat">Solution</span> Federal law limits how collectors can contact you. Our attorneys can send the cease letter the day you enroll. <span class="beat">Outcome</span> The calls could stop, and each proven violation could pay you $1,000. Get a Free Review.
+      </div>
+    </div>
+    <div class="copy-block variants">
+      <div class="label">DCO variants 2 &amp; 3</div>
+      <div class="value">2. Harassment from a debt collector wears you down. The FDCPA was written to stop exactly that. Our attorneys can send the cease letter the day you enroll, document every violation, and pursue what's owed to you. The calls could stop. Get a Free Consultation.</div>
+      <div class="value">3. Calls before sunrise. Threats over the phone. Contact at your job. That's federal-violation territory. Our attorneys can send the cease letter today and pursue every breach for damages. The calls could stop, and the violations could pay you. Get a Free Review.</div>
+    </div>
+    <div class="copy-block"><div class="label">Headline · 30 chars</div><div class="value">Get a Free Review of Your Case</div></div>
+    <div class="copy-block"><div class="label">Description · 29 chars</div><div class="value">FDCPA violations may pay $1K.</div></div>
+    <div class="cta-row">
+      <div class="cta-spec"><div class="label">Primary CTA</div><code>BOOK_NOW</code></div>
+      <div class="cta-spec"><div class="label">Alternate</div><code>CALL_NOW</code> · 201-416-7080</div>
+    </div>
+  </div>
+  <div class="ad-col">
+    <div class="fb-card">
+      <div class="post-header">
+        <div class="avatar"><svg width="22" height="22" viewBox="0 0 22 22"><g fill="#DC4646"><rect x="2" y="3" width="18" height="2"/><rect x="9" y="5" width="4" height="2"/><path d="M5 7 L17 7 L17 14 Q17 16 19 18 L3 18 Q5 16 5 14 Z"/><line x1="11" y1="9" x2="11" y2="16" stroke="#DC4646" stroke-width="1"/><circle cx="11" cy="16" r="1.5"/></g></svg></div>
+        <div class="name"><strong>Crēdo Legal</strong><small>Sponsored</small></div>
+        <div class="menu">⋯</div>
+      </div>
+      <p class="post-text">A debt collector keeps calling. Before 8 AM, at your job, with threats. Federal law limits how collectors can contact you. Our attorneys can send the cease letter the day you enroll. The calls could stop, and each proven violation could pay you $1,000. Get a Free Review.</p>
+      <button class="see-more">See more</button>
+      <div class="ad-display"><img src="assets/harassment/AS_Harassment_NW_Form_4x5.png"></div>
+      <div class="link-card">
+        <div class="link-text">
+          <div class="domain">credolegal.com</div>
+          <div class="headline">Get a Free Review of Your Case</div>
+          <div class="description">FDCPA violations may pay $1K.</div>
+        </div>
+        <button class="cta">Book Now</button>
+      </div>
+      <div class="actions"><button>👍 Like</button><button>💬 Comment</button><button>↗ Share</button></div>
+    </div>
+    <div class="carousel">
+      <button class="thumb" data-type="image" data-src="assets/harassment/AS_Harassment_NW_Form_1x1.png"><img src="assets/harassment/AS_Harassment_NW_Form_1x1.png"><span class="label">1:1 Feed</span></button>
+      <button class="thumb active" data-type="image" data-src="assets/harassment/AS_Harassment_NW_Form_4x5.png"><img src="assets/harassment/AS_Harassment_NW_Form_4x5.png"><span class="label">4:5 Feed mob</span></button>
+      <button class="thumb" data-type="image" data-src="assets/harassment/AS_Harassment_NW_Form_9x16.png"><img src="assets/harassment/AS_Harassment_NW_Form_9x16.png"><span class="label">9:16 Reels</span></button>
+      <button class="thumb" data-type="image" data-src="assets/harassment/AS_Harassment_NW_Form_1_91x1.png"><img src="assets/harassment/AS_Harassment_NW_Form_1_91x1.png"><span class="label">1.91:1 RC</span></button>
+      <button class="thumb" data-type="video" data-src="assets/harassment/AS_Harassment_NW_Form_9x16.mp4"><video src="assets/harassment/AS_Harassment_NW_Form_9x16.mp4" muted preload="metadata"></video><span class="label">9:16 video</span></button>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== MEDICAL ======================== -->
+<section class="vertical" data-vertical="medical-debt" data-prefix="AS_MedicalDebt_NW_Form">
+  <div class="meta-col">
+    <h2>5. Medical Debt</h2>
+    <div class="vertical-id">AS_MedicalDebt_NW_Form</div>
+    <div class="burned"><small>Burned into image</small>The bill gets challenged.<br>They often can't prove it.</div>
+    <div class="copy-block">
+      <div class="label">Primary text (variant 1)</div>
+      <div class="value">
+        <span class="beat">Context + Pain</span> Medical bills you can't pay, with numbers that don't add up, and collectors at your door. <span class="beat">Solution</span> Hospitals often can't produce signed agreements or itemized proof, and our attorneys can challenge what they can't validate. <span class="beat">Outcome</span> Your bills could be disputed, and your balance could shrink. Get a Free Review.
+      </div>
+    </div>
+    <div class="copy-block variants">
+      <div class="label">DCO variants 2 &amp; 3</div>
+      <div class="value">2. A medical bill arrives that you can't pay, and the collector follows. Hospitals often can't produce signed agreements or itemized proof, and our attorneys can challenge what they can't validate. Your bill could be disputed, often reduced. Get a Free Consultation.</div>
+      <div class="value">3. You got the diagnosis, then the bill. Now collections are calling. Our attorneys can check whether the hospital can actually prove the debt, and most of the time, they can't. Your bill could be disputed and your collectors could go quiet. Get a Free Review.</div>
+    </div>
+    <div class="copy-block"><div class="label">Headline · 30 chars</div><div class="value">Get a Free Review of Your Case</div></div>
+    <div class="copy-block"><div class="label">Description · 20 chars</div><div class="value">We can dispute them.</div></div>
+    <div class="cta-row">
+      <div class="cta-spec"><div class="label">Primary CTA</div><code>BOOK_NOW</code></div>
+      <div class="cta-spec"><div class="label">Alternate</div><code>CALL_NOW</code> · 612-260-9170</div>
+    </div>
+  </div>
+  <div class="ad-col">
+    <div class="fb-card">
+      <div class="post-header">
+        <div class="avatar"><svg width="22" height="22" viewBox="0 0 22 22"><g fill="#DC4646"><rect x="2" y="3" width="18" height="2"/><rect x="9" y="5" width="4" height="2"/><path d="M5 7 L17 7 L17 14 Q17 16 19 18 L3 18 Q5 16 5 14 Z"/><line x1="11" y1="9" x2="11" y2="16" stroke="#DC4646" stroke-width="1"/><circle cx="11" cy="16" r="1.5"/></g></svg></div>
+        <div class="name"><strong>Crēdo Legal</strong><small>Sponsored</small></div>
+        <div class="menu">⋯</div>
+      </div>
+      <p class="post-text">Medical bills you can't pay, with numbers that don't add up, and collectors at your door. Hospitals often can't produce signed agreements or itemized proof, and our attorneys can challenge what they can't validate. Your bills could be disputed, and your balance could shrink. Get a Free Review.</p>
+      <button class="see-more">See more</button>
+      <div class="ad-display"><img src="assets/medical-debt/AS_MedicalDebt_NW_Form_4x5.png"></div>
+      <div class="link-card">
+        <div class="link-text">
+          <div class="domain">credolegal.com</div>
+          <div class="headline">Get a Free Review of Your Case</div>
+          <div class="description">We can dispute them.</div>
+        </div>
+        <button class="cta">Book Now</button>
+      </div>
+      <div class="actions"><button>👍 Like</button><button>💬 Comment</button><button>↗ Share</button></div>
+    </div>
+    <div class="carousel">
+      <button class="thumb" data-type="image" data-src="assets/medical-debt/AS_MedicalDebt_NW_Form_1x1.png"><img src="assets/medical-debt/AS_MedicalDebt_NW_Form_1x1.png"><span class="label">1:1 Feed</span></button>
+      <button class="thumb active" data-type="image" data-src="assets/medical-debt/AS_MedicalDebt_NW_Form_4x5.png"><img src="assets/medical-debt/AS_MedicalDebt_NW_Form_4x5.png"><span class="label">4:5 Feed mob</span></button>
+      <button class="thumb" data-type="image" data-src="assets/medical-debt/AS_MedicalDebt_NW_Form_9x16.png"><img src="assets/medical-debt/AS_MedicalDebt_NW_Form_9x16.png"><span class="label">9:16 Reels</span></button>
+      <button class="thumb" data-type="image" data-src="assets/medical-debt/AS_MedicalDebt_NW_Form_1_91x1.png"><img src="assets/medical-debt/AS_MedicalDebt_NW_Form_1_91x1.png"><span class="label">1.91:1 RC</span></button>
+      <button class="thumb" data-type="video" data-src="assets/medical-debt/AS_MedicalDebt_NW_Form_9x16.mp4"><video src="assets/medical-debt/AS_MedicalDebt_NW_Form_9x16.mp4" muted preload="metadata"></video><span class="label">9:16 video</span></button>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== GARNISHMENT ======================== -->
+<section class="vertical" data-vertical="garnishment" data-prefix="AS_Garnishment_NW_Form">
+  <div class="meta-col">
+    <h2>6. Garnishment</h2>
+    <div class="vertical-id">AS_Garnishment_NW_Form</div>
+    <div class="burned"><small>Burned into image</small>More stays on the table.<br>We file the exemption.</div>
+    <div class="copy-block">
+      <div class="label">Primary text (variant 1)</div>
+      <div class="value">
+        <span class="beat">Context + Pain</span> Your wages are garnished, and only a small amount is left to cover the month. <span class="beat">Solution</span> Federal law protects part of your pay. Our attorneys can file the exemption motion. <span class="beat">Outcome</span> More of your paycheck could stay yours. Get a Free Review.
+      </div>
+    </div>
+    <div class="copy-block variants">
+      <div class="label">DCO variants 2 &amp; 3</div>
+      <div class="value">2. Your paycheck arrives short, and after the garnishment, what's left barely covers the rent. Federal law has rules about that, and most people don't know it. Our attorneys can file the exemption motion, and more of your pay could stay yours. Get a Free Consultation.</div>
+      <div class="value">3. Garnishment is taking what you need to live on. Federal exemptions exist to protect part of your wages, but you have to claim them. Our attorneys can file the motion, and more of your paycheck could stay yours. Get a Free Review.</div>
+    </div>
+    <div class="copy-block"><div class="label">Headline · 30 chars</div><div class="value">Get a Free Review of Your Case</div></div>
+    <div class="copy-block"><div class="label">Description · 33 chars</div><div class="value">Federal law protects part of pay.</div></div>
+    <div class="cta-row">
+      <div class="cta-spec"><div class="label">Primary CTA</div><code>BOOK_NOW</code></div>
+      <div class="cta-spec"><div class="label">Alternate (recommended, financial urgency)</div><code>CALL_NOW</code> · 720-414-1751</div>
+    </div>
+  </div>
+  <div class="ad-col">
+    <div class="fb-card">
+      <div class="post-header">
+        <div class="avatar"><svg width="22" height="22" viewBox="0 0 22 22"><g fill="#DC4646"><rect x="2" y="3" width="18" height="2"/><rect x="9" y="5" width="4" height="2"/><path d="M5 7 L17 7 L17 14 Q17 16 19 18 L3 18 Q5 16 5 14 Z"/><line x1="11" y1="9" x2="11" y2="16" stroke="#DC4646" stroke-width="1"/><circle cx="11" cy="16" r="1.5"/></g></svg></div>
+        <div class="name"><strong>Crēdo Legal</strong><small>Sponsored</small></div>
+        <div class="menu">⋯</div>
+      </div>
+      <p class="post-text">Your wages are garnished, and only a small amount is left to cover the month. Federal law protects part of your pay. Our attorneys can file the exemption motion. More of your paycheck could stay yours. Get a Free Review.</p>
+      <button class="see-more">See more</button>
+      <div class="ad-display"><img src="assets/garnishment/AS_Garnishment_NW_Form_4x5.png"></div>
+      <div class="link-card">
+        <div class="link-text">
+          <div class="domain">credolegal.com</div>
+          <div class="headline">Get a Free Review of Your Case</div>
+          <div class="description">Federal law protects part of pay.</div>
+        </div>
+        <button class="cta">Book Now</button>
+      </div>
+      <div class="actions"><button>👍 Like</button><button>💬 Comment</button><button>↗ Share</button></div>
+    </div>
+    <div class="carousel">
+      <button class="thumb" data-type="image" data-src="assets/garnishment/AS_Garnishment_NW_Form_1x1.png"><img src="assets/garnishment/AS_Garnishment_NW_Form_1x1.png"><span class="label">1:1 Feed</span></button>
+      <button class="thumb active" data-type="image" data-src="assets/garnishment/AS_Garnishment_NW_Form_4x5.png"><img src="assets/garnishment/AS_Garnishment_NW_Form_4x5.png"><span class="label">4:5 Feed mob</span></button>
+      <button class="thumb" data-type="image" data-src="assets/garnishment/AS_Garnishment_NW_Form_9x16.png"><img src="assets/garnishment/AS_Garnishment_NW_Form_9x16.png"><span class="label">9:16 Reels</span></button>
+      <button class="thumb" data-type="image" data-src="assets/garnishment/AS_Garnishment_NW_Form_1_91x1.png"><img src="assets/garnishment/AS_Garnishment_NW_Form_1_91x1.png"><span class="label">1.91:1 RC</span></button>
+      <button class="thumb" data-type="video" data-src="assets/garnishment/AS_Garnishment_NW_Form_9x16.mp4"><video src="assets/garnishment/AS_Garnishment_NW_Form_9x16.mp4" muted preload="metadata"></video><span class="label">9:16 video</span></button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+  // Carousel
+  document.querySelectorAll('section.vertical').forEach(section => {
+    const display = section.querySelector('.ad-display');
+    const thumbs = section.querySelectorAll('.carousel .thumb');
+    thumbs.forEach(thumb => {
+      thumb.addEventListener('click', () => {
+        const type = thumb.dataset.type;
+        const src = thumb.dataset.src;
+        if (type === 'image') {
+          display.innerHTML = `<img src="${src}" alt="Crēdo Legal creative">`;
+        } else if (type === 'video') {
+          display.innerHTML = `<video src="${src}" controls autoplay muted loop playsinline></video>`;
+        }
+        thumbs.forEach(t => t.classList.remove('active'));
+        thumb.classList.add('active');
+      });
+    });
+  });
+
+  // See more / See less truncation
+  function refreshSeeMore() {
+    document.querySelectorAll('.fb-card').forEach(card => {
+      const text = card.querySelector('.post-text');
+      const more = card.querySelector('.see-more');
+      if (!text || !more) return;
+      // Reset to truncated state to measure honestly
+      const wasExpanded = text.classList.contains('expanded');
+      text.classList.remove('expanded');
+      // If content overflows the 3-line clamp, show the See more link
+      if (text.scrollHeight > text.clientHeight + 1) {
+        more.classList.add('visible');
+      } else {
+        more.classList.remove('visible');
+      }
+      if (wasExpanded) text.classList.add('expanded');
+    });
+  }
+  document.querySelectorAll('.see-more').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const text = btn.previousElementSibling;
+      if (text.classList.contains('expanded')) {
+        text.classList.remove('expanded');
+        btn.textContent = 'See more';
+      } else {
+        text.classList.add('expanded');
+        btn.textContent = 'See less';
+      }
+    });
+  });
+  window.addEventListener('load', refreshSeeMore);
+  window.addEventListener('resize', refreshSeeMore);
+</script>
+
+</body>
+</html>
