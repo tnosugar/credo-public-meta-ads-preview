@@ -139,7 +139,6 @@ function render(){
       '<div class="rw-anchor">'+esc(c.anchor)+'</div>';
     const acts=el('div','rw-acts');
     if(st==='pending'){
-      acts.appendChild(actBtn(L.apply,'apply-btn',()=>ADAPTER.update(id,{status:'applied',applied_at:Date.now()})));
       acts.appendChild(actBtn(L.edit,'edit-btn',()=>modal('Edit comment',c.anchor,c.comment||'',c.replacement||'',(t,r)=>ADAPTER.update(id,{comment:t,replacement:r||null,edited_at:Date.now()}))));
       acts.appendChild(actBtn(L.archive,'archive-btn',()=>ADAPTER.update(id,{status:'archived',archived_at:Date.now()})));
     } else if(st==='applied'){
