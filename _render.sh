@@ -31,8 +31,11 @@ CHECK_ONLY=false
 [[ -f "$SRC_HTML" ]] || { echo "ERROR: canonical source not found: $SRC_HTML" >&2; exit 1; }
 
 # --- referenced assets (relative paths like assets/<vertical>/<file>) ---
-mapfile -t REFS < <(grep -oE 'src="assets/[^"]*"' "$SRC_HTML" \
-  | sed -E 's/^src="(.*)"$/\1/' | sort -u)
+# Match asset paths anywhere in the HTML: in src="..." attributes AND inside
+# the embedded JS asset map (the per-ad ratio/direction switcher), where paths
+# appear as bare quoted JSON string values rather than src attributes.
+mapfile -t REFS < <(grep -oE 'assets/[A-Za-z0-9_./-]+\.(png|jpe?g|mp4|webp|gif|svg)' "$SRC_HTML" \
+  | sort -u)
 echo "Canonical source: $SRC_HTML"
 echo "Referenced assets: ${#REFS[@]}"
 
@@ -73,10 +76,11 @@ repo and are intentionally not mirrored here.
 
 The prototype renders the five debt/service ad sets (Credit Card, Lawsuit,
 Harassment, Medical Debt, Garnishment) as a Facebook feed of 14 ads. Each ad
-card carries an ad-set heading, a topic title, the primary text, a per-card
-toggle across four creative directions (Illustration / Photo / Still life /
-9:16 video), the "Get a Free Review of Your Case" link card, and the Book Now
-CTA.
+card carries an ad-set heading, a topic title, a Headline and a Message variant
+dropdown, the primary text, and a per-card creative selector: an Image tab
+(Illustration / Photo / Still life sub-tabs plus a ratio dropdown for 1:1, 4:5,
+9:16, and 1.91:1) and a Video tab (the 9:16 animation). It ends with the
+"Get a Free Review of Your Case" link card and the Book Now CTA.
 
 ---
 

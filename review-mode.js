@@ -112,7 +112,8 @@ function modal(title,ctx,initText,initRepl,onSave){
   ov.onclick=e=>{if(e.target===ov)ov.remove()};document.body.appendChild(ov);ta.focus();
 }
 function openComposer(anchor,elm){
-  const prev=(elm.textContent||'').replace(/\s+/g,' ').trim().slice(0,80)||(elm.querySelector('img,video')?'[creative]':'');
+  const note=elm.getAttribute('data-variant-note');
+  const prev=note||(elm.textContent||'').replace(/\s+/g,' ').trim().slice(0,80)||(elm.querySelector('img,video')?'[creative]':'');
   modal('Add comment',anchor,'','',(text,repl)=>ADAPTER.create({comment:text,replacement:repl||null,anchor:anchor,page:SLUG,author:ME,status:'pending',timestamp:Date.now(),text_preview:prev,url:location.href,user_agent:navigator.userAgent}));
 }
 
@@ -124,7 +125,7 @@ function render(){
   TABS.querySelectorAll('button').forEach(b=>{b.querySelector('.rw-c').textContent=counts[TAB_OF[b.dataset.k]]||0;});
   // outlines
   document.querySelectorAll('.has-comment,.has-applied-comment').forEach(e=>e.classList.remove('has-comment','has-applied-comment'));
-  all.forEach(([id,c])=>{const st=statusOf(c);if(st==='archived')return;const a=document.querySelector('[data-comment-id="'+(window.CSS&&CSS.escape?CSS.escape(c.anchor):c.anchor)+'"]');if(a)a.classList.add(st==='applied'?'has-applied-comment':'has-comment')});
+  all.forEach(([id,c])=>{const st=statusOf(c);if(st==='archived')return;const sel='[data-comment-id="'+(window.CSS&&CSS.escape?CSS.escape(c.anchor):c.anchor)+'"]';document.querySelectorAll(sel).forEach(a=>a.classList.add(st==='applied'?'has-applied-comment':'has-comment'))});
   // list for current tab
   const want=TAB_OF[FILTER];
   const rows=all.filter(([id,c])=>statusOf(c)===want).sort((a,b)=>(a[1].timestamp||0)-(b[1].timestamp||0));
@@ -158,5 +159,10 @@ function spotlight(anchor){const a=document.querySelector('[data-comment-id="'+(
   ME=reviewer();
   try{ADAPTER=FB_OK?await firebaseAdapter():localAdapter();}catch(e){console.warn('[review] firebase init failed, using local',e);ADAPTER=localAdapter();}
   buildChrome();anchorPass();
+  /* variant-aware anchors (credo variation): the prototype rewrites a zone's
+   * data-comment-id when its headline/message/creative selection changes, then
+   * calls this hook so the highlight pass re-matches comments to the now-current
+   * variant. Per-dimension scoping falls out of the existing match-by-anchor. */
+  window.__rwRefresh=render;
   ADAPTER.subscribe(data=>{COMMENTS=data||{};render()});
 })();

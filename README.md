@@ -9,10 +9,11 @@ repo and are intentionally not mirrored here.
 
 The prototype renders the five debt/service ad sets (Credit Card, Lawsuit,
 Harassment, Medical Debt, Garnishment) as a Facebook feed of 14 ads. Each ad
-card carries an ad-set heading, a topic title, the primary text, a per-card
-toggle across four creative directions (Illustration / Photo / Still life /
-9:16 video), the "Get a Free Review of Your Case" link card, and the Book Now
-CTA.
+card carries an ad-set heading, a topic title, a Headline and a Message variant
+dropdown, the primary text, and a per-card creative selector: an Image tab
+(Illustration / Photo / Still life sub-tabs plus a ratio dropdown for 1:1, 4:5,
+9:16, and 1.91:1) and a Video tab (the 9:16 animation). It ends with the
+"Get a Free Review of Your Case" link card and the Book Now CTA.
 
 ---
 
