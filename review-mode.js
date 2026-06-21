@@ -7,8 +7,8 @@ const L = Object.assign({
   bannerTitle:'Review mode', localOnly:'Local-only', exit:'Exit review', sidebarTitle:'Comments',
   empty:'No comments here yet. Hover an ad, its copy, headline, description, or image and click the +.',
   add:'+ Comment', save:'Post comment', cancel:'Cancel',
-  edit:'Edit', del:'Delete', apply:'Apply', archive:'Archive', restore:'Restore',
-  tabActive:'Active', tabApplied:'Applied', tabArchived:'Archived',
+  edit:'Edit', del:'Delete', resolve:'Resolve', reopen:'Reopen',
+  tabOpen:'Open', tabResolved:'Resolved', resolvePrompt:'Resolution note (what was done):',
   placeholder:'Your feedback…', replacementPlaceholder:'Suggested change (optional)…', namePrompt:'Your name:'
 }, CFG.REVIEW_LABELS || {});
 const FB = CFG.FIREBASE_CONFIG || {};
@@ -24,7 +24,7 @@ const SLUG = pageSlug();
 function reviewer(){let n=store.get('credo_reviewer');if(!n){n=(window.prompt(L.namePrompt,'')||'Anonymous').trim()||'Anonymous';store.set('credo_reviewer',n);}return n;}
 
 /* status normalize (reader shim for legacy boolean records) */
-function statusOf(c){ if(c.status)return c.status; if(c.archived)return 'archived'; if(c.applied)return 'applied'; return 'pending'; }
+function statusOf(c){ const s=c.status; if(s==='resolved'||s==='applied'||s==='archived'||c.archived||c.applied)return 'resolved'; return 'pending'; }
 
 /* ---- adapter ---- */
 function localAdapter(){
@@ -53,8 +53,8 @@ function el(t,c,h){const e=document.createElement(t);if(c)e.className=c;if(h!=nu
 function esc(s){return (s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 function when(ts){const d=new Date(ts||Date.now());return d.toLocaleDateString()+' '+d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}
 
-let SIDE,LIST,TABS,PILL,ADAPTER,ME,COMMENTS={},FILTER='active',curEl=null,curId=null,hideT=null;
-const TAB_OF={active:'pending',applied:'applied',archived:'archived'};
+let SIDE,LIST,TABS,PILL,ADAPTER,ME,COMMENTS={},FILTER='open',curEl=null,curId=null,hideT=null;
+const TAB_OF={open:'pending',resolved:'resolved'};
 
 function buildChrome(){
   const ban=el('div','review-banner');
@@ -65,7 +65,7 @@ function buildChrome(){
   SIDE=el('aside','review-sidebar');
   SIDE.appendChild(el('h3',null,'<span>'+esc(L.sidebarTitle)+'</span>'));
   TABS=el('div','review-tabs');
-  [['active',L.tabActive],['applied',L.tabApplied],['archived',L.tabArchived]].forEach(([k,lbl])=>{
+  [['open',L.tabOpen],['resolved',L.tabResolved]].forEach(([k,lbl])=>{
     const b=el('button',k===FILTER?'on':null,esc(lbl)+' <span class="rw-c">0</span>'); b.dataset.k=k;
     b.onclick=()=>{FILTER=k;TABS.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x.dataset.k===k));render();};
     TABS.appendChild(b);
@@ -133,19 +133,18 @@ function render(){
   rows.forEach(([id,c])=>{
     const st=statusOf(c);
     const row=el('div','review-row');
-    row.innerHTML='<div class="rw-meta"><b>'+esc(c.author||'Anonymous')+'</b><span class="rw-badge rw-'+st+'">'+st+'</span><span>'+when(c.timestamp)+(c.edited_at?' · edited':'')+'</span></div>'+
+    const blabel=st==='resolved'?'resolved':'open';
+    row.innerHTML='<div class="rw-meta"><b>'+esc(c.author||'Anonymous')+'</b><span class="rw-badge rw-'+st+'">'+blabel+'</span><span>'+when(c.timestamp)+(c.edited_at?' · edited':'')+'</span></div>'+
       '<div class="rw-body">'+esc(c.comment||'')+'</div>'+
       (c.replacement?'<div class="rw-repl">↳ '+esc(c.replacement)+'</div>':'')+
+      (st==='resolved'&&c.resolution?'<div class="rw-resolution">✓ '+esc(c.resolution)+'</div>':'')+
       '<div class="rw-anchor">'+esc(c.anchor)+'</div>';
     const acts=el('div','rw-acts');
     if(st==='pending'){
       acts.appendChild(actBtn(L.edit,'edit-btn',()=>modal('Edit comment',c.anchor,c.comment||'',c.replacement||'',(t,r)=>ADAPTER.update(id,{comment:t,replacement:r||null,edited_at:Date.now()}))));
-      acts.appendChild(actBtn(L.archive,'archive-btn',()=>ADAPTER.update(id,{status:'archived',archived_at:Date.now()})));
-    } else if(st==='applied'){
-      acts.appendChild(actBtn(L.restore,'restore-btn',()=>ADAPTER.update(id,{status:'pending'})));
-      acts.appendChild(actBtn(L.archive,'archive-btn',()=>ADAPTER.update(id,{status:'archived',archived_at:Date.now()})));
+      acts.appendChild(actBtn(L.resolve,'resolve-btn',()=>{const note=(window.prompt(L.resolvePrompt,'')||'').trim();ADAPTER.update(id,{status:'resolved',resolution:note||('Resolved · '+ME),resolved_at:Date.now(),resolved_by:ME});}));
     } else {
-      acts.appendChild(actBtn(L.restore,'restore-btn',()=>ADAPTER.update(id,{status:'pending'})));
+      acts.appendChild(actBtn(L.reopen,'restore-btn',()=>ADAPTER.update(id,{status:'pending',resolution:null})));
     }
     acts.appendChild(actBtn(L.del,'delete-btn',()=>{if(confirm('Delete this comment?'))ADAPTER.remove(id)}));
     row.appendChild(acts);

@@ -77,3 +77,8 @@
 [data-review-mode="on"] .review-row .restore-btn:hover{color:var(--rw-cool);filter:brightness(.6)}
 [data-review-mode="on"] .review-row .edit-btn:hover{color:var(--rw-deep)}
 [data-review-mode="on"] .review-row .delete-btn:hover{color:#c0392b}
+
+/* merged Open/Resolved state */
+[data-review-mode="on"] .rw-badge.rw-resolved{background:#e7f3ea;color:#2f7d4e}
+[data-review-mode="on"] .review-row .rw-resolution{margin-top:5px;font-size:12.5px;color:#2f7d4e;background:#eef7f0;border-left:3px solid #2f7d4e;padding:4px 7px;border-radius:3px}
+[data-review-mode="on"] .review-row .resolve-btn:hover{color:#2f7d4e}
