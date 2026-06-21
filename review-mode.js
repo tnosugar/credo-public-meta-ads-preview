@@ -120,8 +120,8 @@ function openComposer(anchor,elm){
 function actBtn(label,cls,fn){const b=el('button',cls,esc(label));b.onclick=ev=>{ev.stopPropagation();fn()};return b;}
 function render(){
   const all=Object.entries(COMMENTS).filter(([id,c])=>c&&c.page===SLUG);
-  const counts={pending:0,applied:0,archived:0};
-  all.forEach(([id,c])=>{counts[statusOf(c)]++});
+  const counts={pending:0,resolved:0};
+  all.forEach(([id,c])=>{counts[statusOf(c)]=(counts[statusOf(c)]||0)+1});
   TABS.querySelectorAll('button').forEach(b=>{b.querySelector('.rw-c').textContent=counts[TAB_OF[b.dataset.k]]||0;});
   // outlines
   document.querySelectorAll('.has-comment,.has-applied-comment').forEach(e=>e.classList.remove('has-comment','has-applied-comment'));
